@@ -109,6 +109,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .finish-daily:disabled { opacity: .35; cursor: not-allowed; }
 .quest-audio { min-height: 46px; margin: -10px 0 18px; padding: 0 13px; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,.55); background: transparent; color: var(--surface); font-size: 10px; cursor: pointer; }
 .quest-audio small { margin-left: 8px; color: var(--acid); font-size: 7px; letter-spacing: .12em; }
+.quest-audio-row { display: flex; flex-wrap: wrap; gap: 8px; margin: -10px 0 18px; }
+.quest-audio-row .quest-audio { margin: 0; }
 .daily-return-bar { width: min(calc(100% - 36px), 720px); margin: 12px auto; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--ink); background: var(--acid); }
 .daily-return-bar > span { font-size: 8px; font-weight: 700; letter-spacing: .12em; }
 .daily-return-bar button { min-height: 40px; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; border: 0; background: var(--ink); color: var(--surface); font-size: 9px; cursor: pointer; }
@@ -248,7 +250,14 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .article-dek-zh { max-width: 580px; margin: 14px 0 0; color: var(--muted); font-family: var(--serif); font-size: 14px; line-height: 1.75; }
 .byline { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px 15px; color: var(--muted); font-size: 8px; line-height: 1.5; letter-spacing: .05em; }
 .byline a { display: inline-flex; align-items: center; gap: 4px; color: var(--signal); text-decoration: none; }
-.article-audio { min-height: 51px; margin-top: 21px; padding: 0 14px; display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--ink); background: transparent; text-align: left; cursor: pointer; }
+.article-listening { display: grid; gap: 8px; margin-top: 21px; }
+.ted-original-audio, .article-audio { min-height: 51px; padding: 0 14px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--ink); text-align: left; text-decoration: none; cursor: pointer; }
+.ted-original-audio { background: var(--ink); color: var(--surface); }
+.ted-original-audio > span, .article-audio > span { flex: 1; }
+.ted-original-audio span, .ted-original-audio strong, .ted-original-audio small { display: block; }
+.ted-original-audio strong { font-size: 10px; }
+.ted-original-audio small { margin-top: 3px; color: rgba(255,255,255,.66); font-size: 8px; }
+.article-audio { background: transparent; }
 .article-audio span, .article-audio strong, .article-audio small { display: block; }
 .article-audio strong { font-size: 10px; }
 .article-audio small { margin-top: 3px; color: var(--muted); font-size: 8px; }
@@ -420,11 +429,12 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .grammar-note aside { margin-top: 18px; padding: 14px; background: var(--ink); color: var(--surface); font-size: 11px; line-height: 1.7; }
 .grammar-note aside span { margin-bottom: 5px; display: block; color: var(--acid); font-size: 8px; letter-spacing: .12em; }
 .dialogue-play { width: 100%; min-height: 48px; margin: 16px 0; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--ink); background: transparent; cursor: pointer; }
-.dialogue-line { display: grid; grid-template-columns: 58px 1fr 38px; gap: 12px; padding: 15px 0; border-top: 1px solid var(--line); }
+.dialogue-line { display: grid; grid-template-columns: 58px 1fr 60px; gap: 12px; padding: 15px 0; border-top: 1px solid var(--line); }
 .dialogue-line > span { color: var(--signal); font-family: "Noto Sans KR", var(--display); font-size: 10px; }
 .dialogue-line p { margin: 0; font-family: "Noto Sans KR", var(--display); font-size: 17px; line-height: 1.55; }
 .dialogue-line small { margin-top: 6px; display: block; color: var(--muted); font-family: var(--serif); font-size: 11px; }
-.dialogue-line > button { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: transparent; color: var(--signal); cursor: pointer; }
+.dialogue-line > button { width: 58px; height: 36px; display: flex; align-items: center; justify-content: center; gap: 4px; border: 1px solid var(--line); background: transparent; color: var(--signal); cursor: pointer; }
+.dialogue-line > button small { display: inline; margin: 0; color: inherit; font-family: var(--display); font-size: 7px; }
 .lesson-practice { margin: 35px -18px 0; padding: 0 18px 25px; background: var(--blue); color: var(--surface); }
 .lesson-practice .lesson-section-title { border-color: rgba(255,255,255,.4); }
 .lesson-practice .lesson-section-title h2 { color: var(--surface); }

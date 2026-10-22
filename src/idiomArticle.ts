@@ -10,9 +10,9 @@ export const idiomArticle: Article = {
   topic: 'Everyday English',
   level: 'B1–B2',
   minutes: 7,
-  source: 'TED-Ed · Everyday communication',
-  sourceUrl: 'https://ed.ted.com/',
-  sourceNote: 'TED 官方学习入口 · Marginalia 原创语境精读',
+  source: 'Marginalia · Everyday English',
+  sourceUrl: 'https://www.merriam-webster.com/dictionary/down%20for',
+  sourceNote: 'Marginalia 原创语境精读 · 词义参考 Merriam-Webster；不是 TED 逐字稿',
   monogram: 'I’M DOWN FOR THAT',
   primer: {
     question: '朋友说“Let’s get noodles after class.”你想自然地表示愿意，会选哪句？',

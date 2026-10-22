@@ -51,7 +51,12 @@ const seeds: MonthlyArticleSeed[] = [
 ]
 
 function buildArticle(seed: MonthlyArticleSeed, index: number): Article {
-  const sourceUrl = `https://www.ted.com/search?q=${encodeURIComponent(seed.talk)}`
+  const slugOverrides: Record<string, string> = {
+    'grit-direction': 'angela_lee_duckworth_grit_the_power_of_passion_and_perseverance',
+    'data-humility': 'hans_rosling_the_best_stats_you_ve_ever_seen',
+  }
+  const generatedSlug = `${seed.speaker} ${seed.talk}`.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '')
+  const sourceUrl = `https://www.ted.com/talks/${slugOverrides[seed.id] ?? generatedSlug}`
   const haystack = `${seed.id} ${seed.title} ${seed.talk}`.toLowerCase()
   const topic = /listen|help|story|conversation|single-story/.test(haystack) ? 'Communication & Culture'
     : /decision|choice|uncertainty|data|stat|algorithm/.test(haystack) ? 'Thinking & Decisions'
@@ -66,7 +71,7 @@ function buildArticle(seed: MonthlyArticleSeed, index: number): Article {
     dek: seed.lens.charAt(0).toUpperCase() + seed.lens.slice(1) + '.',
     dekZh: seed.lensZh + '。',
     language: 'English', topic, level: 'B2', minutes: 6,
-    source: `TED · ${seed.speaker}`, sourceUrl, sourceNote: `TED 官方学习来源 · 主题：${seed.talk} · Marginalia 原创精读`,
+    source: `TED · ${seed.speaker}`, sourceUrl, sourceNote: `TED 官方原声与逐字稿 · 主题：${seed.talk} · Marginalia 学习导读`,
     monogram: seed.title.toUpperCase(),
     primer: { question: `${seed.titleZh}，你现在最接近哪一种判断？`, choices: ['直觉上同意', '想先看证据与限制'], feedback: ['先保留这一直觉，阅读时寻找它成立的条件。', '很好。文章会同时提供主张、例子与限制。'] },
     quiz: { prompt: '这篇短文最核心的学习方式是什么？', choices: [{ id: 'a', text: '记住一句绝对正确的口号。' }, { id: 'b', text: '理解一个主张，同时检查例子、边界与行动。' }, { id: 'c', text: '只要看完就算掌握。' }], answer: 'b', correctFeedback: '正确。好的学习单元同时保留主张、应用条件和可执行动作。', incorrectFeedback: '再看看第三段的限制，以及最后一段如何把观点变成一个小实验。' },

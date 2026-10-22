@@ -144,13 +144,14 @@ type DailyQuest = {
   route: string
   routeLabel: string
   audioText?: string
+  audioClips?: { label: string; text: string }[]
   audioLang?: 'en-US' | 'ko-KR'
 }
 
 const dailyQuestSets: DailyQuest[][] = [
   [
     { category: '英语', unit: 'english', eyebrow: 'EVERYDAY ENGLISH', prompt: '朋友问“Want to try that new café?”你说“I’m down for that.”是什么意思？', choices: ['我心情不好', '我愿意／算我一个', '我要坐下'], answer: 1, reveal: '这是很自然的口语响应，意思是“我愿意”。语气比 I agree 更轻松，常用于接受邀请或建议。', lesson: '从一句「I’m down for that」出发，读懂邀请、语气与归属感。', route: '/read/everyday-agreement', routeLabel: '进入英语原文', audioText: "Want to try that new café? I'm down for that.", audioLang: 'en-US' },
-    { category: '韩语', unit: 'korean', eyebrow: 'KOREAN EXPRESSION', prompt: '朋友说“같이 갈까요?”（要一起去吗？）哪个回答最自然？', choices: ['좋아요. 같이 가요.', '아니요. 학생이에요.', '이것은 책이에요.'], answer: 0, reveal: '“좋아요”先表示接受建议，“같이 가요”再确认一起行动。这里不只记单词，还要记住整个响应块。', lesson: '学会用 -(으)ㄹ까요? 发出邀请，再用完整表达接受或婉拒。', route: '/korean/lesson/invitation', routeLabel: '进入同主题韩语小课', audioText: '같이 갈까요? 좋아요. 같이 가요.', audioLang: 'ko-KR' },
+    { category: '韩语', unit: 'korean', eyebrow: 'KOREAN EXPRESSION', prompt: '朋友说“같이 갈까요?”（要一起去吗？）哪个回答最自然？', choices: ['좋아요. 같이 가요.', '아니요. 학생이에요.', '이것은 책이에요.'], answer: 0, reveal: '“좋아요”先表示接受建议，“같이 가요”再确认一起行动。这里不只记单词，还要记住整个响应块。', lesson: '学会用 -(으)ㄹ까요? 发出邀请，再用完整表达接受或婉拒。', route: '/korean/lesson/invitation', routeLabel: '进入同主题韩语小课', audioClips: [{ label: '听提问', text: '같이 갈까요?' }, { label: '听回答', text: '좋아요. 같이 가요.' }], audioLang: 'ko-KR' },
     { category: '知识', unit: 'knowledge', eyebrow: 'ONE SMALL IDEA', prompt: '第六片披萨已经不能带来额外满足，但前五片的满足感仍然存在。哪个判断正确？', choices: ['总效用立刻归零', '第六片的边际效用为 0', '前五片都没有价值'], answer: 1, reveal: '边际效用看的是“再多一个单位”带来多少新增满足；它为 0，不代表之前的累计价值消失。', lesson: '用可拖动的披萨实验，把“总量”和“新增量”真正分开。', route: '/explore/marginal-utility', routeLabel: '进入互动微课' },
   ],
   [
@@ -297,6 +298,7 @@ function DailyQuizArena({ quests, index, answers, onAnswer, onNext }: { quests: 
     <div className="quiz-xp"><i style={{ width: `${((index + (answered ? 1 : 0)) / quests.length) * 100}%` }} /><span>+{answers.filter((choice, answerIndex) => choice === quests[answerIndex].answer).length * 20} XP</span></div>
     <p className="quiz-category">{quest.category} · 先猜再学</p><h1>{quest.prompt}</h1>
     {quest.audioText && <button className="quest-audio" onClick={() => speakText(quest.audioText!, quest.audioLang ?? 'en-US')}><Volume2 size={18} /> 听原声节奏 <small>{quest.audioLang === 'ko-KR' ? '한국어' : 'ENGLISH'}</small></button>}
+    {quest.audioClips && <div className="quest-audio-row">{quest.audioClips.map((clip) => <button className="quest-audio" key={clip.label} onClick={() => speakText(clip.text, quest.audioLang ?? 'ko-KR')}><Volume2 size={18} /> {clip.label}<small>한국어</small></button>)}</div>}
     <div className="game-choice-list">{quest.choices.map((choice, choiceIndex) => <button key={choice} disabled={answered} className={answered && choiceIndex === quest.answer ? 'correct' : selected === choiceIndex ? 'wrong' : ''} onClick={() => onAnswer(choiceIndex)}><span>{String.fromCharCode(65 + choiceIndex)}</span><strong>{choice}</strong>{answered && choiceIndex === quest.answer ? <Check size={18} /> : <ChevronRight size={18} />}</button>)}</div>
     {answered && <div className={selected === quest.answer ? 'quest-reveal correct' : 'quest-reveal'}><span>{selected === quest.answer ? '命中知识点 · +20 XP' : '已找到新线索 · +0 XP'}</span><p>{quest.reveal}</p><button onClick={onNext}>{index === quests.length - 1 ? '解锁延伸学习' : '下一关'} <ChevronRight size={16} /></button></div>}
   </section>
@@ -581,8 +583,8 @@ function KoreanLessonPage() {
 
       {session.dialogue.length > 0 && <section className="dialogue-sheet">
         <div className="lesson-section-title"><span>DIALOGUE</span><h2>先读懂，再开口</h2></div>
-        <button className="dialogue-play" onClick={() => speakKorean(session.dialogue.map((line) => line.ko).join(' '))}><Volume2 size={18} /> 播放整段对话</button>
-        {session.dialogue.map((line) => <div className="dialogue-line" key={`${line.speaker}-${line.ko}`}><span lang="ko">{line.speaker}</span><p lang="ko">{line.ko}<small>{line.zh}</small></p><button onClick={() => speakKorean(line.ko)} aria-label={`播放 ${line.ko}`}><Volume2 size={15} /></button></div>)}
+        <button className="dialogue-play" onClick={() => speakKorean(session.dialogue.map((line) => line.ko).join(' '))}><Volume2 size={18} /> 播放问答整段</button>
+        {session.dialogue.map((line) => <div className="dialogue-line" key={`${line.speaker}-${line.ko}`}><span lang="ko">{line.speaker}</span><p lang="ko">{line.ko}<small>{line.zh}</small></p><button onClick={() => speakKorean(line.ko)} aria-label={`单独播放 ${line.ko}`}><Volume2 size={15} /><small>单句</small></button></div>)}
       </section>}
 
       <section className="lesson-practice">
@@ -1086,6 +1088,7 @@ function ReaderPage() {
   }, [restored, selectedArticle])
 
   if (!selectedArticle) return <FuturePage section="没有找到这篇文章" phase="404" message="当前精选阅读中还没有这项内容。" />
+  const isTedArticle = selectedArticle.source.startsWith('TED')
 
   const toggleTranslation = (id: string) => setOpenTranslations((current) => {
     const next = new Set(current)
@@ -1121,12 +1124,14 @@ function ReaderPage() {
 
       <article className="reading-sheet">
         <header className="article-header">
-          <div className="article-meta">英语 · 心理学 · {selectedArticle.minutes} 分钟</div>
+          <div className="article-meta">英语 · {selectedArticle.topic} · {selectedArticle.minutes} 分钟</div>
           <h1>{selectedArticle.title}</h1>
           <p className="article-dek">{selectedArticle.dek}</p>
           <p className="article-dek-zh">{selectedArticle.titleZh}：{selectedArticle.dekZh}</p>
           <div className="byline"><a href={selectedArticle.sourceUrl} target="_blank" rel="noreferrer">{selectedArticle.source} <ExternalLink size={11} /></a><span>{selectedArticle.sourceNote}</span></div>
-          <button className="article-audio" onClick={() => speakText(selectedArticle.paragraphs.map((paragraph) => paragraph.original).join(' '), 'en-US', 0.86)}><Volume2 size={18} /><span><strong>听整篇英语</strong><small>英语语音 · 0.86×</small></span></button>
+          <div className="article-listening">
+            {isTedArticle ? <a className="ted-original-audio" href={selectedArticle.sourceUrl} target="_blank" rel="noreferrer"><Headphones size={18} /><span><strong>前往 TED 播放官方原声</strong><small>原讲者音频＋完整逐字稿 · 将打开官方页面</small></span><ExternalLink size={14} /></a> : <button className="article-audio" onClick={() => speakText(selectedArticle.paragraphs.map((paragraph) => paragraph.original).join(' '), 'en-US', 0.86)}><Volume2 size={18} /><span><strong>跟读本文</strong><small>系统合成语音 · 0.86×</small></span></button>}
+          </div>
           <div className="reader-primer">
             <span>读前判断 · 没有答错</span>
             <p>{selectedArticle.primer.question}</p>
@@ -1138,7 +1143,7 @@ function ReaderPage() {
         </header>
 
         <div className="mode-row">
-          <span>阅读模式 · <i>黄色是预设学习点，也可长按圈词</i></span>
+          <span>阅读模式 · <i>{isTedArticle ? '段落喇叭是系统跟读音；TED 原声请使用上方官方入口' : '黄色是预设学习点，也可长按圈词'}</i></span>
           <div className="segmented" role="group" aria-label="阅读模式">
             <button className={mode === 'original' ? 'active' : ''} onClick={() => setMode('original')}>仅原文</button>
             <button className={mode === 'bilingual' ? 'active' : ''} onClick={() => setMode('bilingual')}>双语</button>
@@ -1153,7 +1158,7 @@ function ReaderPage() {
             return (
               <section className="paragraph-block" id={`paragraph-${paragraph.id}`} data-paragraph data-index={index} key={paragraph.id}>
                 <span className="paragraph-number">{String(index + 1).padStart(2, '0')}</span>
-                <button className="paragraph-audio" onClick={() => speakText(paragraph.original, 'en-US', 0.86)} aria-label={`播放第 ${index + 1} 段英语`}><Volume2 size={15} /></button>
+                <button className="paragraph-audio" onClick={() => speakText(paragraph.original, 'en-US', 0.86)} aria-label={`用系统跟读音播放第 ${index + 1} 段英语`}><Volume2 size={15} /></button>
                 <p>{renderAnnotatedText(paragraph.original, paragraph.annotations, setActiveAnnotation)}</p>
                 {showTranslation && <p className="translation" lang="zh-CN">{paragraph.translation}</p>}
                 {mode === 'original' && (
