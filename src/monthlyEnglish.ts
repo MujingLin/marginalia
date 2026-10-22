@@ -52,23 +52,30 @@ const seeds: MonthlyArticleSeed[] = [
 
 function buildArticle(seed: MonthlyArticleSeed, index: number): Article {
   const sourceUrl = `https://www.ted.com/search?q=${encodeURIComponent(seed.talk)}`
+  const haystack = `${seed.id} ${seed.title} ${seed.talk}`.toLowerCase()
+  const topic = /listen|help|story|conversation|single-story/.test(haystack) ? 'Communication & Culture'
+    : /decision|choice|uncertainty|data|stat|algorithm/.test(haystack) ? 'Thinking & Decisions'
+      : /creative|design|attention/.test(haystack) ? 'Creativity & Design'
+        : /learn|beginner|flow|habit|performance/.test(haystack) ? 'Learning & Growth'
+          : /success|happiness|future|relationship/.test(haystack) ? 'Life & Society'
+            : index % 2 === 0 ? 'Ideas & Society' : 'Mind & Behaviour'
   return {
     id: seed.id,
     title: seed.title,
     titleZh: seed.titleZh,
     dek: seed.lens.charAt(0).toUpperCase() + seed.lens.slice(1) + '.',
     dekZh: seed.lensZh + '。',
-    language: 'English', topic: index % 4 === 0 ? 'Society' : index % 3 === 0 ? 'Learning' : 'Psychology', level: 'B2', minutes: 6,
+    language: 'English', topic, level: 'B2', minutes: 6,
     source: `TED · ${seed.speaker}`, sourceUrl, sourceNote: `TED 官方学习来源 · 主题：${seed.talk} · Marginalia 原创精读`,
     monogram: seed.title.toUpperCase(),
     primer: { question: `${seed.titleZh}，你现在最接近哪一种判断？`, choices: ['直觉上同意', '想先看证据与限制'], feedback: ['先保留这一直觉，阅读时寻找它成立的条件。', '很好。文章会同时提供主张、例子与限制。'] },
     quiz: { prompt: '这篇短文最核心的学习方式是什么？', choices: [{ id: 'a', text: '记住一句绝对正确的口号。' }, { id: 'b', text: '理解一个主张，同时检查例子、边界与行动。' }, { id: 'c', text: '只要看完就算掌握。' }], answer: 'b', correctFeedback: '正确。好的学习单元同时保留主张、应用条件和可执行动作。', incorrectFeedback: '再看看第三段的限制，以及最后一段如何把观点变成一个小实验。' },
     closingPrompt: seed.practiceZh,
     paragraphs: [
-      { id: `${seed.id}-idea`, original: `This reading examines ${seed.lens}. Its central claim is that ${seed.claim}. The idea becomes useful only when we can recognise the conditions in which it applies.`, translation: `这篇精读关注${seed.lensZh}。核心主张是：${seed.claimZh}。只有当我们能辨认它适用的条件时，这个观点才真正有用。`, annotations: [] },
+      { id: `${seed.id}-idea`, original: `This reading examines ${seed.lens}. Its central claim is that ${seed.claim}. The idea becomes useful only when we can recognise the conditions in which it applies.`, translation: `这篇精读关注${seed.lensZh}。核心主张是：${seed.claimZh}。只有当我们能辨认它适用的条件时，这个观点才真正有用。`, annotations: [{ text: 'central claim', type: 'vocabulary', targetId: 'central-claim' }, { text: 'the conditions in which it applies', type: 'vocabulary', targetId: 'conditions-apply' }] },
       { id: `${seed.id}-case`, original: seed.example, translation: seed.exampleZh, annotations: [] },
       { id: `${seed.id}-limit`, original: seed.caution, translation: seed.cautionZh, annotations: [] },
-      { id: `${seed.id}-practice`, original: `Turn the idea into an observation rather than a slogan. ${seed.practice} Record what changes, what does not, and which explanation now seems more plausible.`, translation: `把观点变成一次观察，而不是一句口号。${seed.practiceZh}记录什么发生了变化、什么没有变化，以及哪一种解释现在更可信。`, annotations: [] },
+      { id: `${seed.id}-practice`, original: `Turn the idea into an observation rather than a slogan. ${seed.practice} Record what changes, what does not, and which explanation now seems more plausible.`, translation: `把观点变成一次观察，而不是一句口号。${seed.practiceZh}记录什么发生了变化、什么没有变化，以及哪一种解释现在更可信。`, annotations: [{ text: 'rather than a slogan', type: 'vocabulary', targetId: 'rather-than-slogan' }, { text: 'more plausible', type: 'vocabulary', targetId: 'more-plausible' }] },
     ],
   }
 }

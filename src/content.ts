@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { monthlyEnglishArticles } from './monthlyEnglish'
+import { idiomArticle } from './idiomArticle'
 
 export const annotationSchema = z.object({
   text: z.string(),
@@ -44,7 +45,7 @@ export const article = articleSchema.parse({
   dek: 'Why the shape of an ordinary choice can matter more than willpower.',
   dekZh: '为什么日常选择的结构，有时比意志力更重要。',
   language: 'English',
-  topic: 'Psychology',
+  topic: 'Thinking & Decisions',
   level: 'B2',
   minutes: 9,
   source: 'TED · Dan Ariely',
@@ -110,7 +111,7 @@ export const additionalArticles = z.array(articleSchema).parse([
   {
     id: 'patient-work-of-listening', title: 'The Patient Work of Listening', titleZh: '倾听是一种耐心的工作',
     dek: 'Hearing arrives automatically. Listening is the deliberate act of making room for meaning.', dekZh: '听见会自动发生，倾听却需要主动为意义腾出空间。',
-    language: 'English', topic: 'Psychology', level: 'B2', minutes: 10,
+    language: 'English', topic: 'Communication & Culture', level: 'B2', minutes: 10,
     source: 'TED · Julian Treasure', sourceUrl: 'https://www.ted.com/talks/julian_treasure_5_ways_to_listen_better', sourceNote: 'TED 官方来源 · Marginalia 原创主题延伸 · 2026 年 10 月审核',
     monogram: 'THE PATIENT WORK OF LISTENING',
     primer: { question: '沉默地等别人说完，就等于认真倾听吗？', choices: ['基本等于', '不一定'], feedback: ['不打断很重要，但倾听还包括注意、理解、检查自己的推断。', '文章会进一步区分“保持安静”和“主动建构理解”。'] },
@@ -128,7 +129,7 @@ export const additionalArticles = z.array(articleSchema).parse([
   {
     id: 'good-life-is-plural', title: 'A Good Life Is Built in the Plural', titleZh: '好生活以复数形式建成',
     dek: 'Relationships are not decoration around a life. They are part of its working structure.', dekZh: '关系并非生活外围的装饰，而是生活得以运作的结构之一。',
-    language: 'English', topic: 'Psychology', level: 'B2', minutes: 11,
+    language: 'English', topic: 'Life & Society', level: 'B2', minutes: 11,
     source: 'TED · Robert Waldinger', sourceUrl: 'https://www.ted.com/talks/robert_waldinger_what_makes_a_good_life_lessons_from_the_longest_study_on_happiness', sourceNote: 'TED 官方来源 · Marginalia 原创主题延伸 · 2026 年 10 月审核',
     monogram: 'A GOOD LIFE IN THE PLURAL',
     primer: { question: '关系的“数量”越多，就一定越幸福吗？', choices: ['通常是', '质量可能更重要'], feedback: ['文章会区分社交数量、关系质量和可靠支持。', '这是核心线索：关键不只是认识多少人，而是关系如何运作。'] },
@@ -145,9 +146,19 @@ export const additionalArticles = z.array(articleSchema).parse([
   },
 ])
 
-export const articles = z.array(articleSchema).parse([article, ...additionalArticles, ...monthlyEnglishArticles])
+export const articles = z.array(articleSchema).parse([idiomArticle, article, ...additionalArticles, ...monthlyEnglishArticles])
 
 export const vocabulary = {
+  'down-for-that': { lemma: "I'm down for that", pos: 'expression', pronunciation: '/aɪm daʊn fəðæt/', meaning: '我愿意；算我一个', context: "I'm down for that", example: "Dinner at seven? I'm down for that." },
+  'language-chunk': { lemma: 'a whole chunk', pos: 'learning term', pronunciation: '/tʃʌŋk/', meaning: '一个整体语块；不逐词拆分的表达', context: 'learn a whole chunk', example: 'Learn “sounds good” as a whole chunk.' },
+  'count-me-in': { lemma: 'count me in', pos: 'expression', pronunciation: '/kaʊnt mi ɪn/', meaning: '算我一个；我参加', context: 'Count me in', example: 'You are going hiking? Count me in.' },
+  'works-for-me': { lemma: 'that works for me', pos: 'expression', pronunciation: '/ðæt wɜːks fə miː/', meaning: '那个时间／方案我可以', context: 'That works for me', example: 'We can meet at three. That works for me.' },
+  'not-up-for-it': { lemma: "I'm not up for it", pos: 'expression', pronunciation: '/aɪm nɒt ʌp fər ɪt/', meaning: '我现在不太想／没精力做', context: "I'm not up for it tonight", example: "Thanks, but I'm not up for a party tonight." },
+  'language-register': { lemma: 'register', pos: 'language term', pronunciation: '/ˈredʒɪstə/', meaning: '语体；由场合与关系决定的表达风格', context: 'Register matters', example: 'The same idea needs a different register in a text to a friend and an email to a client.' },
+  'central-claim': { lemma: 'central claim', pos: 'academic expression', pronunciation: '/ˈsentrəl kleɪm/', meaning: '核心主张；文章最想证明的观点', context: 'Its central claim is that…', example: 'The central claim needs evidence and a clear boundary.' },
+  'conditions-apply': { lemma: 'the conditions in which it applies', pos: 'academic expression', pronunciation: '', meaning: '它成立／适用的条件', context: 'recognise the conditions in which it applies', example: 'A useful idea also explains the conditions in which it applies.' },
+  'rather-than-slogan': { lemma: 'rather than a slogan', pos: 'expression', pronunciation: '', meaning: '而不只是一句口号', context: 'an observation rather than a slogan', example: 'Turn the advice into an experiment rather than a slogan.' },
+  'more-plausible': { lemma: 'more plausible', pos: 'expression', pronunciation: '/mɔː ˈplɔːzəbəl/', meaning: '更说得通；更有可能是真的', context: 'which explanation now seems more plausible', example: 'The second explanation became more plausible after the test.' },
   architecture: { lemma: 'architecture', pos: 'noun', pronunciation: '/ˈɑːkɪtektʃə/', meaning: '结构；构造方式', context: 'an invisible architecture around the day', example: 'The policy changed the architecture of everyday choices.' },
   redirect: { lemma: 'redirect', pos: 'verb', pronunciation: '/ˌriːdəˈrekt/', meaning: '使改变方向；重新引导', context: 'those seconds often redirect behaviour', example: 'A small reminder can redirect attention.' },
   agency: { lemma: 'agency', pos: 'noun', pronunciation: '/ˈeɪdʒənsi/', meaning: '自主行动与作出选择的能力', context: 'agency operates inside an environment', example: 'Good design should preserve the user’s agency.' },
@@ -173,4 +184,4 @@ export const concepts = {
   'default-effect': { name: 'Default effect', nameZh: '默认效应', definition: '当一个选项被预先设定时，人们更可能保留它，即使其他选项同样可选。', note: '原因可能包括省力、对推荐的推断，以及对改变结果的不确定。' },
 } as const
 
-export const filters = ['全部', '英语', '心理学', '学习', '社会', '10 分钟以内'] as const
+export const filters = ['今日', '日常表达', '沟通与文化', '思维与决策', '学习与成长', '创造与设计', '生活与社会'] as const
